@@ -1,0 +1,544 @@
+.admin-container {
+  min-height: 100vh;
+  background: #232323;
+  color: #ebebeb;
+  padding: 20px;
+}
+
+.admin-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #004d99;
+}
+
+.admin-header h1 {
+  color: #32cd32;
+  font-size: 28px;
+  margin: 0 0 5px 0;
+}
+
+.admin-header p {
+  color: #ebebeb;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(235, 235, 235, 0.1);
+  border: 1px solid #004d99;
+  border-radius: 8px;
+  color: #ebebeb;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.tab-btn:hover {
+  background: rgba(50, 205, 50, 0.1);
+}
+
+.tab-btn.active {
+  background: #32cd32;
+  color: #1a3b5d;
+  border-color: #32cd32;
+}
+
+.admin-content {
+  background: rgba(235, 235, 235, 0.1);
+  border: 1px solid #004d99;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  color: #ffd700;
+  margin: 0;
+  font-size: 20px;
+}
+
+.add-user-btn {
+  background: #32cd32;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.add-user-btn:hover {
+  background: #228b22;
+  transform: translateY(-2px);
+}
+
+.users-table {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px 100px 120px;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #004d99;
+  font-weight: 600;
+  color: #ebebeb;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px 100px 120px;
+  gap: 15px;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 77, 153, 0.3);
+  align-items: center;
+}
+
+.table-row:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.user-name {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.user-email {
+  color: #ebebeb;
+  opacity: 0.8;
+}
+
+.role-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+}
+
+.status-indicator {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-indicator.active {
+  background: rgba(50, 205, 50, 0.2);
+  color: #32cd32;
+}
+
+.status-indicator.inactive {
+  background: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background: #ffd700;
+  color: #1a3b5d;
+}
+
+.delete-btn {
+  background: #ff4444;
+  color: white;
+}
+
+.save-btn {
+  background: #32cd32;
+  color: white;
+}
+
+.cancel-btn {
+  background: #666;
+  color: white;
+}
+
+.edit-input,
+.edit-select {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #004d99;
+  border-radius: 4px;
+  padding: 6px 8px;
+  color: #ebebeb;
+  font-size: 14px;
+  width: 100%;
+}
+
+.edit-input:focus,
+.edit-select:focus {
+  outline: none;
+  border-color: #00bfff;
+}
+
+.location-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.location-input svg {
+  position: absolute;
+  left: 12px;
+  color: #ffd700;
+  z-index: 1;
+}
+
+.location-input input {
+  padding-left: 40px;
+}
+
+.threshold-settings {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.threshold-settings h3 {
+  color: #00bfff;
+  margin: 0 0 20px 0;
+  font-size: 18px;
+}
+
+.threshold-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.threshold-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.threshold-item label {
+  color: #ebebeb;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.threshold-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(235, 235, 235, 0.2);
+  outline: none;
+  cursor: pointer;
+}
+
+.threshold-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #32cd32;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.threshold-value {
+  color: #32cd32;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: right;
+}
+
+.register-btn {
+  background: #32cd32;
+  border: none;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.register-btn:hover {
+  background: #228b22;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(50, 205, 50, 0.3);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.settings-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid rgba(0, 77, 153, 0.3);
+}
+
+.settings-card h3 {
+  color: #00bfff;
+  margin: 0 0 20px 0;
+  font-size: 18px;
+}
+
+.setting-item {
+  margin-bottom: 20px;
+}
+
+.setting-item label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ebebeb;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.number-input {
+  padding: 8px 12px;
+  border: 2px solid #004d99;
+  border-radius: 6px;
+  background: rgba(235, 235, 235, 0.1);
+  color: #ebebeb;
+  font-size: 14px;
+  width: 100px;
+}
+
+.number-input:focus {
+  outline: none;
+  border-color: #00bfff;
+}
+
+.security-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #32cd32;
+}
+
+.security-info p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+@media (max-width: 1024px) {
+  .admin-container {
+    padding: 15px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .threshold-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .settings-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header h1 {
+    font-size: 24px;
+  }
+
+  .admin-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .add-user-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr 80px;
+    gap: 10px;
+  }
+
+  .user-email,
+  .user-role {
+    display: none;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .edit-btn,
+  .delete-btn,
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .threshold-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .slider-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .threshold-value {
+    text-align: center;
+    min-width: auto;
+  }
+
+  .register-btn {
+    width: 100%;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-card {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 10px;
+  }
+
+  .admin-header h1 {
+    font-size: 20px;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    width: 100%;
+  }
+
+  .admin-content {
+    padding: 15px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 60px;
+    gap: 8px;
+  }
+
+  .user-status {
+    display: none;
+  }
+
+  .form-group input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .location-input input {
+    padding-left: 35px;
+  }
+
+  .threshold-settings {
+    padding: 15px;
+  }
+
+  .threshold-settings h3 {
+    font-size: 16px;
+  }
+
+  .settings-card {
+    padding: 12px;
+  }
+
+  .settings-card h3 {
+    font-size: 16px;
+  }
+
+  .number-input {
+    width: 80px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .security-info {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

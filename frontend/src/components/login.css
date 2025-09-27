@@ -1,0 +1,275 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #121212 0%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+}
+
+.power-lines {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #00bfff;
+  box-shadow: 0 0 10px #00bfff;
+}
+
+.power-lines::before,
+.power-lines::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  background: #00bfff;
+  box-shadow: 0 0 10px #00bfff;
+  left: 0;
+  right: 0;
+}
+
+.power-lines::before {
+  top: 100px;
+}
+
+.power-lines::after {
+  top: 200px;
+}
+
+.electric-poles {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 4px;
+  height: 60%;
+  background: #ebebeb;
+  opacity: 0.3;
+}
+
+.electric-poles::before,
+.electric-poles::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  background: #ebebeb;
+  opacity: 0.3;
+}
+
+.electric-poles::before {
+  left: 300px;
+}
+
+.electric-poles::after {
+  left: 600px;
+}
+
+.login-card {
+  background: rgba(235, 235, 235, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 191, 255, 0.2);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.logo-icon {
+  font-size: 32px;
+  color: #004d99;
+}
+
+.logo h1 {
+  color: #1a3b5d;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.login-header p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #1a3b5d;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+#email{color: #333;}
+#password{color: #333;}
+
+.form-group input {
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #00bfff;
+  box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.1);
+}
+
+.password-input {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.password-toggle:hover {
+  color: #004d99;
+}
+
+.login-button {
+  background: #1e1e1e;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  background: #1a3b5d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 77, 153, 0.3);
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-footer p {
+  color: #666;
+  font-size: 12px;
+  margin: 0;
+}
+
+/* Responsive design for mobile and tablet screens */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 20px;
+  }
+
+  .login-card {
+    padding: 30px 20px;
+    max-width: 100%;
+    margin: 0 10px;
+  }
+
+  .logo h1 {
+    font-size: 20px;
+  }
+
+  .logo-icon {
+    font-size: 28px;
+  }
+
+  .electric-poles::before {
+    left: 150px;
+  }
+
+  .electric-poles::after {
+    left: 300px;
+  }
+
+  .power-lines::before {
+    top: 80px;
+  }
+
+  .power-lines::after {
+    top: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 25px 15px;
+    border-radius: 12px;
+  }
+
+  .logo h1 {
+    font-size: 18px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+  }
+
+  .form-group input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .login-button {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+
+  .electric-poles,
+  .electric-poles::before,
+  .electric-poles::after {
+    display: none;
+  }
+}

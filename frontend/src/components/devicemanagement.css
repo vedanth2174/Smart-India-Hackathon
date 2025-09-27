@@ -1,0 +1,398 @@
+.device-management-container {
+  min-height: 100vh;
+  background: #232323;
+  color: #ebebeb;
+  padding: 20px;
+}
+
+.device-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #004d99;
+}
+
+.device-header h1 {
+  color: #ffd700;
+  font-size: 28px;
+  margin: 0 0 5px 0;
+}
+
+.device-header p {
+  color: #ebebeb;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.device-controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: rgba(235, 235, 235, 0.1);
+  border: 1px solid #004d99;
+  border-radius: 8px;
+  padding: 10px 15px;
+  gap: 10px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-bar input {
+  background: none;
+  border: none;
+  color: #ebebeb;
+  font-size: 16px;
+  width: 100%;
+}
+
+.search-bar input::placeholder {
+  color: rgba(235, 235, 235, 0.6);
+}
+
+.search-bar input:focus {
+  outline: none;
+}
+
+.filter-btn {
+  background: #32cd32;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+  background: #228b22;
+  transform: translateY(-2px);
+}
+
+.device-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 20px;
+}
+
+.device-list {
+  background: rgba(235, 235, 235, 0.1);
+  border: 1px solid #004d99;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.device-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 80px;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #004d99;
+  font-weight: 600;
+  color: #ebebeb;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 80px;
+  gap: 15px;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 77, 153, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.table-row.selected {
+  background: rgba(50, 205, 50, 0.1);
+  border-left: 4px solid #32cd32;
+}
+
+.device-id {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.device-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #ebebeb;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background: rgba(235, 235, 235, 0.2);
+}
+
+.device-details {
+  background: rgba(235, 235, 235, 0.1);
+  border: 1px solid #004d99;
+  border-radius: 12px;
+  padding: 20px;
+  height: fit-content;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 77, 153, 0.3);
+}
+
+.details-header h2 {
+  color: #ffd700;
+  margin: 0;
+}
+
+.details-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.restart-btn {
+  background: #32cd32;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  background: #228b22;
+}
+
+.shutdown-btn {
+  background: #ff4444;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.shutdown-btn:hover {
+  background: #cc0000;
+}
+
+.details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.real-time-data h3,
+.historical-chart h3,
+.device-location-map h3 {
+  color: #00bfff;
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+.readings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.reading-card {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.reading-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 5px;
+}
+
+.reading-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.chart-placeholder,
+.map-placeholder {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: rgba(235, 235, 235, 0.6);
+}
+
+.chart-placeholder svg {
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+@media (max-width: 1024px) {
+  .device-content {
+    grid-template-columns: 1fr;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .device-location,
+  .last-reading {
+    display: none;
+  }
+
+  .readings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .device-management-container {
+    padding: 15px;
+  }
+
+  .device-header h1 {
+    font-size: 24px;
+  }
+
+  .device-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-bar {
+    max-width: none;
+  }
+
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .device-status,
+  .action-btn {
+    display: none;
+  }
+
+  .device-details {
+    padding: 15px;
+  }
+
+  .details-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .restart-btn,
+  .shutdown-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .readings-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .reading-card {
+    padding: 12px;
+  }
+
+  .reading-value {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .device-management-container {
+    padding: 10px;
+  }
+
+  .device-header h1 {
+    font-size: 20px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .device-details {
+    padding: 12px;
+  }
+
+  .details-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .reading-value {
+    font-size: 16px;
+  }
+
+  .chart-placeholder,
+  .map-placeholder {
+    padding: 20px;
+  }
+}
