@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate, RouterProvider } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom';
 
 import Login from './components/login'
 import Dashboard from './components/dashboard'
@@ -7,6 +8,7 @@ import DeviceManagement from './components/devicemanagement'
 import Alerts from './components/alerts'
 import Analytics from './components/analytics'
 import AdminPanel from './components/adminpanel'
+import Navbar from './components/navbar'
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token"); // or sessionStorage
@@ -16,55 +18,77 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-function App() {
-
+// Layout component that includes navbar for all protected routes
+const Layout = ({ children }) => {
   return (
     <>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/device-management"
-          element={
-            <ProtectedRoute>
-              <DeviceManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/alerts"
-          element={
-            <ProtectedRoute>
-              <Alerts/>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/analytics"
-          element={
-            <ProtectedRoute>
-              <Analytics/>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin-panel"
-          element={
-            <ProtectedRoute>
-              <AdminPanel/>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+      <Navbar />
+      {children}
+    </>
+  );
+};
+
+const routes = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Dashboard />
+        </Layout>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/device-management",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <DeviceManagement />
+        </Layout>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/alerts",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Alerts />
+        </Layout>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/analytics",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <Analytics />
+        </Layout>
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: "/admin-panel",
+    element: (
+      <ProtectedRoute>
+        <Layout>
+          <AdminPanel />
+        </Layout>
+      </ProtectedRoute>
+    )
+  }
+]);
+
+function App() {
+  return (
+    <>
+      <RouterProvider router={routes} />
     </>
   )
 }
