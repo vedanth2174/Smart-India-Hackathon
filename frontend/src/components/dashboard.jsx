@@ -12,10 +12,12 @@ import {
 import "./dashboard.css"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [selectedPole, setSelectedPole] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const navigate = useNavigate();
 
   const stats = [
     { title: "Total Devices", value: "247", icon: Activity, color: "#00BFFF" },

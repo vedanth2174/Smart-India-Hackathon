@@ -4,9 +4,18 @@ import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import {Server} from 'socket.io';
+import http from 'http';
+
 
 dotenv.config();
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
 app.use(express.json());
 const PORT = process.env.PORT;
 app.use(cors());
@@ -26,6 +35,15 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('user', userSchema);
+
+const DataSchema = new mongoose.Schema({
+  deviceId: String,
+  voltage: Number,
+  timestamp: { type: Date, default: Date.now },
+});
+
+const Data = mongoose.model('sensor_data', DataSchema);
+
 
 
 // Login route
@@ -48,6 +66,30 @@ app.post('/login', async (req, res) => {
   }
 });
     
+// API endpoint to receive data from ESP32
+app.post("/api/data", async (req, res) => {
+  try {
+    const { deviceId, voltage } = req.body;
+
+    const newData = new Data({ deviceId, voltage });
+    await newData.save();
+
+    // Emit real-time data to frontend
+    io.emit("newData", { deviceId, voltage, timestamp: newData.timestamp });
+
+    res.status(200).json({ message: "Data stored successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("Frontend connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Frontend disconnected:", socket.id);
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

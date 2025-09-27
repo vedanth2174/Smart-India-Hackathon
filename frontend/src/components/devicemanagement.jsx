@@ -1,12 +1,26 @@
 "use client"
 
-import { useState } from "react"
 import { Search, Filter, MoreVertical, Power, RotateCcw, MapPin, TrendingUp } from "lucide-react"
 import "./devicemanagement.css"
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 const DeviceManagement = () => {
+    const [voltage, setVoltage] = useState("Waiting for data...");
   const [selectedDevice, setSelectedDevice] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
+  useEffect(() => {
+    const socket = io("http://localhost:5000");
+
+    socket.on("newData", (data) => {
+      console.log("Received:", data); // { deviceId, voltage, timestamp }
+      setVoltage(`${data.voltage} V`);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const devices = [
     {
@@ -15,7 +29,7 @@ const DeviceManagement = () => {
       status: "Online",
       lastReading: "2 min ago",
       current: 45.2,
-      voltage: 230.5,
+      voltage: {voltage}.value,
       tilt: 0.2,
       coordinates: { lat: 40.7128, lng: -74.006 },
     },
