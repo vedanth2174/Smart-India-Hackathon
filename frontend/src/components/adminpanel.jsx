@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Users, Plus, Settings, Trash2, Edit, Save, X, Shield, MapPin,Home,Monitor } from "lucide-react"
 import "./adminpanel.css"
 
@@ -9,18 +9,40 @@ const AdminPanel = () => {
   const [editingUser, setEditingUser] = useState(null)
   const [newDevice, setNewDevice] = useState({
     id: "",
-    location: "",
+    location: "", // user types "77.5946, 12.9716"
     currentThreshold: 50,
     voltageThreshold: 220,
     tiltThreshold: 3,
-  })
+  });
 
-  const [users, setUsers] = useState([
-    { id: 1, name: "John Smith", email: "john@company.com", role: "Admin", status: "Active" },
-    { id: 2, name: "Sarah Johnson", email: "sarah@company.com", role: "Engineer", status: "Active" },
-    { id: 3, name: "Mike Wilson", email: "mike@company.com", role: "Operator", status: "Inactive" },
-    { id: 4, name: "Lisa Brown", email: "lisa@company.com", role: "Engineer", status: "Active" },
-  ])
+  const [users, setUsers] = useState([]); // Start with empty array
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        let response = await fetch("http://localhost:5000/users"); // your backend route
+        let data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch users");
+        }
+
+        // Exclude password if your backend sends it
+        const cleanedData = data.map(user => ({
+          name: user.name,
+          email: user.email,
+          role: user.Role,
+          status: user.Status
+        }));
+
+        setUsers(cleanedData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const [systemSettings, setSystemSettings] = useState({
     currentThreshold: 55,
@@ -44,16 +66,48 @@ const AdminPanel = () => {
     setUsers(users.filter((user) => user.id !== userId))
   }
 
-  const handleDeviceRegister = () => {
-    console.log("Registering device:", newDevice)
-    setNewDevice({
-      id: "",
-      location: "",
-      currentThreshold: 50,
-      voltageThreshold: 220,
-      tiltThreshold: 3,
-    })
+  const handleDeviceRegister = async (e) => {
+  e.preventDefault();
+  try {
+    let url = "http://localhost:5000/register-device";
+
+    // Convert location string -> [lng, lat]
+    const [lng, lat] = newDevice.location
+      .split(",")
+      .map((coord) => parseFloat(coord.trim()));
+
+    let payload = {
+      deviceId: newDevice.id,
+      location: {
+        type: "Point",
+        coordinates: [lng, lat], // must be [longitude, latitude]
+      },
+      currentThreshold: newDevice.currentThreshold,
+      voltageThreshold: newDevice.voltageThreshold,
+      tiltThreshold: newDevice.tiltThreshold,
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    console.log("Response:", data);
+
+    if (!response.ok) {
+      throw new Error(
+        data.message || response.statusText || "Device registration failed"
+      );
+    }else{
+        alert("Device registered successfully.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert(error.message);
   }
+};
 
   const handleSettingChange = (setting, value) => {
     setSystemSettings((prev) => ({
@@ -70,8 +124,10 @@ const AdminPanel = () => {
         return "#FFD700"
       case "Operator":
         return "#32CD32"
+      case "Tester":
+        return "#2fa9e6ff"
       default:
-        return "#EBEBEB"
+        return "#000000ff"
     }
   }
 

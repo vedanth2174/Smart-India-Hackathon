@@ -30,11 +30,38 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // User schema and model
 const userSchema = new mongoose.Schema({
+  name: String,
+  Role: String,
+  Status: String,
   email: { type: String, unique: true },
   password: String, 
 });
 
 const User = mongoose.model('user', userSchema);
+
+const DeviceSchema = new mongoose.Schema({
+  deviceId: { 
+    type: String, 
+    unique: true,  // enforce uniqueness at DB level
+    required: true 
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'], // "Point" means a single coordinate pair
+      required: true
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true
+    }
+  },
+  currentThreshold: Number,
+  voltageThreshold: Number,
+  tiltThreshold: Number,
+});
+
+const Device = mongoose.model('device', DeviceSchema);
 
 const DataSchema = new mongoose.Schema({
   deviceId: String,
@@ -65,6 +92,74 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+//Get users
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.find(); // Fetch all users
+    res.status(200).json(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
+// Register Device
+app.post("/register-device", async (req, res) => {
+  try {
+    const {
+      deviceId,
+      location,
+      currentThreshold,
+      voltageThreshold,
+      tiltThreshold,
+    } = req.body;
+
+    // Validate location format
+    if (
+      !location ||
+      location.type !== "Point" ||
+      !Array.isArray(location.coordinates) ||
+      location.coordinates.length !== 2
+    ) {
+      return res.status(400).json({ message: "Invalid location format" });
+    }
+
+    // Check if device already exists
+    const existingDevice = await Device.findOne({ deviceId });
+    if (existingDevice) {
+      return res.status(400).json({ message: "Device ID already registered" });
+    }
+
+    // Create new device
+    const newDevice = new Device({
+      deviceId,
+      location,
+      currentThreshold,
+      voltageThreshold,
+      tiltThreshold,
+    });
+
+    await newDevice.save();
+
+    res.status(201).json({
+      message: "Device registered successfully",
+      device: newDevice,
+    });
+  } catch (err) {
+    console.error("Error registering device:", err);
+
+    // Handle unique constraint error (Mongo duplicate key)
+    if (err.code === 11000) {
+      return res.status(400).json({ message: "Device ID must be unique" });
+    }
+
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+
     
 // API endpoint to receive data from ESP32
 app.post("/api/data", async (req, res) => {
