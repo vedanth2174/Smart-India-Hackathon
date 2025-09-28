@@ -143,7 +143,7 @@ const Dashboard = () => {
               <div className="interactive-map">
                 <MapContainer
                   center={[18.457542863645475, 73.87709805840844]}
-                  zoom={10}
+                  zoom={15}
                   style={{ height: "500px", width: "100%" }}
                 >
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

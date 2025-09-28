@@ -112,7 +112,7 @@ const DeviceManagement = () => {
   }, [devices, searchTerm]);
 
   if (loading) return <p>Loading devices...</p>;
-  const volt = readings.voltage*280
+  const volt = readings ? readings.voltage*280 : 0 
   return (
     <div className="device-management-container">
       <header className="device-header">
