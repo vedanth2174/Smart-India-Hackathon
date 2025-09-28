@@ -2,25 +2,29 @@
 
 import { Search, Filter, MoreVertical, Power, RotateCcw, MapPin, TrendingUp } from "lucide-react"
 import "./devicemanagement.css"
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useState } from "react"
+import { io } from "socket.io-client"
+import { useLocation } from "react-router-dom" // Added useLocation to get navigation state
 
 const DeviceManagement = () => {
-    const [voltage, setVoltage] = useState("Waiting for data...");
+  const [voltage, setVoltage] = useState("Waiting for data...")
   const [selectedDevice, setSelectedDevice] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
+
+  const location = useLocation()
+
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("http://localhost:5000")
 
     socket.on("newData", (data) => {
-      console.log("Received:", data); // { deviceId, voltage, timestamp }
-      setVoltage(`${data.voltage} V`);
-    });
+      console.log("Received:", data) // { deviceId, voltage, timestamp }
+      setVoltage(`${data.voltage} V`)
+    })
 
     return () => {
-      socket.disconnect();
-    };
-  }, []);
+      socket.disconnect()
+    }
+  }, [])
 
   const devices = [
     {
@@ -29,7 +33,7 @@ const DeviceManagement = () => {
       status: "Online",
       lastReading: "2 min ago",
       current: 45.2,
-      voltage: {voltage}.value,
+      voltage: voltage.value || 230.5,
       tilt: 0.2,
       coordinates: { lat: 40.7128, lng: -74.006 },
     },
@@ -65,6 +69,15 @@ const DeviceManagement = () => {
     },
   ]
 
+  useEffect(() => {
+    if (location.state?.selectedDeviceId) {
+      const deviceToSelect = devices.find((device) => device.id === location.state.selectedDeviceId)
+      if (deviceToSelect) {
+        setSelectedDevice(deviceToSelect)
+      }
+    }
+  }, [location.state])
+
   const filteredDevices = devices.filter(
     (device) =>
       device.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -89,6 +102,20 @@ const DeviceManagement = () => {
       <header className="device-header">
         <h1>Device Management</h1>
         <p>Monitor and control LT line devices</p>
+        {location.state?.selectedDeviceId && (
+          <div
+            style={{
+              backgroundColor: "#e3f2fd",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              marginTop: "8px",
+              fontSize: "14px",
+              color: "#1976d2",
+            }}
+          >
+            📍 Navigated from map - Device {location.state.selectedDeviceId} selected
+          </div>
+        )}
       </header>
 
       <div className="device-controls">
