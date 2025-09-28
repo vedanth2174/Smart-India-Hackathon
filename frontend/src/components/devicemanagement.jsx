@@ -6,7 +6,9 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 const DeviceManagement = () => {
-    const [voltage, setVoltage] = useState("Waiting for data...");
+  const [devices, setDevices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [voltage, setVoltage] = useState("Waiting for data...");
   const [selectedDevice, setSelectedDevice] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
   useEffect(() => {
@@ -22,67 +24,23 @@ const DeviceManagement = () => {
     };
   }, []);
 
-  const devices = [
-    {
-      id: "DEV001",
-      location: "Sector A - Pole 12",
-      status: "Online",
-      lastReading: "2 min ago",
-      current: 45.2,
-      voltage: {voltage}.value,
-      tilt: 0.2,
-      coordinates: { lat: 40.7128, lng: -74.006 },
-    },
-    {
-      id: "DEV002",
-      location: "Sector B - Pole 23",
-      status: "Warning",
-      lastReading: "1 min ago",
-      current: 52.8,
-      voltage: 225.1,
-      tilt: 2.1,
-      coordinates: { lat: 40.7589, lng: -73.9851 },
-    },
-    {
-      id: "DEV003",
-      location: "Sector C - Pole 47",
-      status: "Critical",
-      lastReading: "30 sec ago",
-      current: 78.9,
-      voltage: 210.3,
-      tilt: 5.2,
-      coordinates: { lat: 40.7505, lng: -73.9934 },
-    },
-    {
-      id: "DEV004",
-      location: "Sector A - Pole 15",
-      status: "Online",
-      lastReading: "3 min ago",
-      current: 42.1,
-      voltage: 232.8,
-      tilt: 0.1,
-      coordinates: { lat: 40.7282, lng: -74.0776 },
-    },
-  ]
+  useEffect(() => {
+    fetch("http://localhost:5000/devices") // your backend URL
+      .then((res) => res.json())
+      .then((data) => {
+        setDevices(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching devices:", err);
+        setLoading(false);
+      });
+  }, []);
 
-  const filteredDevices = devices.filter(
-    (device) =>
-      device.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      device.location.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  if (loading) return <p>Loading devices...</p>;
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Online":
-        return "#32CD32"
-      case "Warning":
-        return "#FFD700"
-      case "Critical":
-        return "#FF4444"
-      default:
-        return "#EBEBEB"
-    }
-  }
+  
+
 
   return (
     <div className="device-management-container">
@@ -117,26 +75,55 @@ const DeviceManagement = () => {
               <div>Last Reading</div>
               <div>Actions</div>
             </div>
-            {filteredDevices.map((device) => (
-              <div
-                key={device.id}
-                className={`table-row ${selectedDevice?.id === device.id ? "selected" : ""}`}
-                onClick={() => setSelectedDevice(device)}
-              >
-                <div className="device-id">{device.id}</div>
-                <div className="device-location">{device.location}</div>
-                <div className="device-status">
-                  <span className="status-indicator" style={{ backgroundColor: getStatusColor(device.status) }}></span>
-                  {device.status}
-                </div>
-                <div className="last-reading">{device.lastReading}</div>
-                <div className="device-actions">
-                  <button className="action-btn">
-                    <MoreVertical size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
+            {devices.map((device) => (
+  <div
+    key={device.deviceId}
+    className={`table-row ${
+      selectedDevice?.deviceId === device.deviceId ? "selected" : ""
+    }`}
+    onClick={() => setSelectedDevice(device)}
+  >
+    {/* Device ID */}
+    <div className="device-id">{device.deviceId}</div>
+
+    {/* Location */}
+    <div className="device-location">
+      {device.location?.coordinates
+        ? `${device.location.coordinates[1]}, ${device.location.coordinates[0]}`
+        : "N/A"}
+    </div>
+
+    {/* Voltage Threshold as Status Example */}
+    <div className="device-status">
+      <span
+        className="status-indicator"
+        style={{
+          backgroundColor:
+            device.voltageThreshold && device.voltageThreshold > 0
+              ? "#32CD32" // green if threshold is set
+              : "gray",   // gray if not set
+        }}
+      ></span>
+      {device.voltageThreshold ? "Active" : "Inactive"}
+    </div>
+
+    {/* Last Reading (from timestamp if you merge with DataSchema) */}
+    <div className="last-reading">
+      {device.timestamp
+        ? new Date(device.timestamp).toLocaleString()
+        : "No Data"}
+    </div>
+
+    {/* Actions */}
+    <div className="device-actions">
+      <button className="action-btn">
+        <MoreVertical size={16} />
+      </button>
+    </div>
+  </div>
+))}
+
+
           </div>
         </div>
 

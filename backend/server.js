@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('user', userSchema);
 
+//Device Schema
 const DeviceSchema = new mongoose.Schema({
   deviceId: { 
     type: String, 
@@ -156,6 +157,21 @@ app.post("/register-device", async (req, res) => {
     }
 
     res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+//Get Devices
+app.get("/devices", async (req, res) => {
+  try {
+    const devices = await Device.find();
+    const formatted = devices.map(d => ({
+      ...d.toObject(),
+      lat: d.location?.coordinates[1],
+      lng: d.location?.coordinates[0],
+    }));
+    res.status(200).json(formatted);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch devices" });
   }
 });
 
