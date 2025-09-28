@@ -2,28 +2,37 @@
 
 import { Search, Filter, MoreVertical, Power, RotateCcw, MapPin, TrendingUp } from "lucide-react"
 import "./devicemanagement.css"
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useState } from "react"
+import { io } from "socket.io-client"
+import { useLocation } from "react-router-dom" // Added useLocation to get navigation state
 
 const DeviceManagement = () => {
+<<<<<<< HEAD
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [voltage, setVoltage] = useState("Waiting for data...");
+=======
+  const [voltage, setVoltage] = useState("Waiting for data...")
+>>>>>>> 43d90414d9b6179417c4e27cff41572f5b0484c4
   const [selectedDevice, setSelectedDevice] = useState(null)
   const [searchTerm, setSearchTerm] = useState("")
+
+  const location = useLocation()
+
   useEffect(() => {
-    const socket = io("http://localhost:5000");
+    const socket = io("http://localhost:5000")
 
     socket.on("newData", (data) => {
-      console.log("Received:", data); // { deviceId, voltage, timestamp }
-      setVoltage(`${data.voltage} V`);
-    });
+      console.log("Received:", data) // { deviceId, voltage, timestamp }
+      setVoltage(`${data.voltage} V`)
+    })
 
     return () => {
-      socket.disconnect();
-    };
-  }, []);
+      socket.disconnect()
+    }
+  }, [])
 
+<<<<<<< HEAD
   useEffect(() => {
     fetch("http://localhost:5000/devices") // your backend URL
       .then((res) => res.json())
@@ -40,6 +49,65 @@ const DeviceManagement = () => {
   if (loading) return <p>Loading devices...</p>;
 
   
+=======
+  const devices = [
+    {
+      id: "DEV001",
+      location: "Sector A - Pole 12",
+      status: "Online",
+      lastReading: "2 min ago",
+      current: 45.2,
+      voltage: voltage.value || 230.5,
+      tilt: 0.2,
+      coordinates: { lat: 40.7128, lng: -74.006 },
+    },
+    {
+      id: "DEV002",
+      location: "Sector B - Pole 23",
+      status: "Warning",
+      lastReading: "1 min ago",
+      current: 52.8,
+      voltage: 225.1,
+      tilt: 2.1,
+      coordinates: { lat: 40.7589, lng: -73.9851 },
+    },
+    {
+      id: "DEV003",
+      location: "Sector C - Pole 47",
+      status: "Critical",
+      lastReading: "30 sec ago",
+      current: 78.9,
+      voltage: 210.3,
+      tilt: 5.2,
+      coordinates: { lat: 40.7505, lng: -73.9934 },
+    },
+    {
+      id: "DEV004",
+      location: "Sector A - Pole 15",
+      status: "Online",
+      lastReading: "3 min ago",
+      current: 42.1,
+      voltage: 232.8,
+      tilt: 0.1,
+      coordinates: { lat: 40.7282, lng: -74.0776 },
+    },
+  ]
+
+  useEffect(() => {
+    if (location.state?.selectedDeviceId) {
+      const deviceToSelect = devices.find((device) => device.id === location.state.selectedDeviceId)
+      if (deviceToSelect) {
+        setSelectedDevice(deviceToSelect)
+      }
+    }
+  }, [location.state])
+
+  const filteredDevices = devices.filter(
+    (device) =>
+      device.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      device.location.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+>>>>>>> 43d90414d9b6179417c4e27cff41572f5b0484c4
 
 
   return (
@@ -47,6 +115,20 @@ const DeviceManagement = () => {
       <header className="device-header">
         <h1>Device Management</h1>
         <p>Monitor and control LT line devices</p>
+        {location.state?.selectedDeviceId && (
+          <div
+            style={{
+              backgroundColor: "#e3f2fd",
+              padding: "8px 16px",
+              borderRadius: "4px",
+              marginTop: "8px",
+              fontSize: "14px",
+              color: "#1976d2",
+            }}
+          >
+            📍 Navigated from map - Device {location.state.selectedDeviceId} selected
+          </div>
+        )}
       </header>
 
       <div className="device-controls">
