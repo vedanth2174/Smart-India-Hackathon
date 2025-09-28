@@ -41,6 +41,47 @@ const Dashboard = () => {
     { id: 5, x: 30, y: 60, status: "normal" },
   ]
 
+    const mapDevices = [
+    {
+      id: "DEV001",
+      name: "Pole S001",
+      position: [18.46095528315637, 73.87741844661039],
+      status: "Active",
+      location: "Sector A - Pole 12",
+    },
+    {
+      id: "DEV002",
+      name: "Pole S002",
+      position: [18.45644670948127, 73.87804907136866],
+      status: "Active",
+      location: "Sector B - Pole 23",
+    },
+    {
+      id: "DEV003",
+      name: "Pole S003",
+      position: [18.460948887704625, 73.87295595126346],
+      status: "Active",
+      location: "Sector C - Pole 47",
+    },
+    {
+      id: "DEV004",
+      name: "Pole S004",
+      position: [18.460815251728373, 73.88192569046863],
+      status: "Active",
+      location: "Sector A - Pole 15",
+    },
+  ]
+
+
+  const handleMarkerClick = (device) => {
+    navigate("/device-management", {
+      state: {
+        selectedDeviceId: device.id,
+        deviceInfo: device,
+      },
+    })
+  }
+
   return (
     <div className="dashboard-container">
       <div className="main-wrapper">
@@ -100,20 +141,31 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="interactive-map">
-                <MapContainer center={[18.457542863645475, 73.87709805840844]} zoom={10} style={{ height: "500px", width: "100%" }}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={[18.46095528315637, 73.87741844661039]}>
-                        <Popup>Pole S001 - Active</Popup>
+                <MapContainer
+                  center={[18.457542863645475, 73.87709805840844]}
+                  zoom={10}
+                  style={{ height: "500px", width: "100%" }}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  {mapDevices.map((device) => (
+                    <Marker
+                      key={device.id}
+                      position={device.position}
+                      eventHandlers={{
+                        click: () => handleMarkerClick(device),
+                      }}
+                    >
+                      <Popup>
+                        <div style={{ cursor: "pointer" }} onClick={() => handleMarkerClick(device)}>
+                          <strong>
+                            {device.name} - {device.status}
+                          </strong>
+                          <br />
+                          <small>Click to view device details</small>
+                        </div>
+                      </Popup>
                     </Marker>
-                    <Marker position={[18.45644670948127, 73.87804907136866]}>
-                        <Popup>Pole S002 - Active</Popup>
-                    </Marker>
-                    <Marker position={[18.460948887704625, 73.87295595126346]}>
-                        <Popup>Pole S003 - Active</Popup>
-                    </Marker>
-                    <Marker position={[18.460815251728373, 73.88192569046863]}>
-                        <Popup>Pole S004 - Active</Popup>
-                    </Marker>
+                  ))}
                 </MapContainer>
               </div>
             </div>

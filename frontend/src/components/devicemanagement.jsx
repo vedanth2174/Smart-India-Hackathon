@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { io } from "socket.io-client";
+import axios from 'axios';
+
 import {
   Search,
   Filter,
@@ -14,10 +16,58 @@ import {
 import "./devicemanagement.css";
 
 const DeviceManagement = () => {
+  // const socket = io("http://10.72.18.236:5000");
+  const [status, setStatus] = useState("OFF");
+  const backendUrl = "http://localhost:5000/relay"; // Backend IP
+  const [readings, setReadings] = useState(null);
+  const Url = "http://10.72.18.236:5000/api/voltage"; // replace with your backend IP
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // useEffect(() => {
+  //   socket.on("relayUpdate", (state) => {
+  //     setRelayState(state);
+  //   });
+
+  //   return () => socket.off("relayUpdate");
+  // }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://10.72.18.236:5000/api/voltage");
+        console.log("Response data:", res.data); // correct object
+        setReadings(res.data);
+      } catch (err) {
+        console.error("Error fetching voltage:", err);
+      }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // log only when reading changes
+  useEffect(() => {
+  }, [readings]);
+
+  const sendAction = async (action) => {
+    try {
+      const res = await fetch(backendUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      console.log(data);
+      setStatus(action === "start" ? "ON" : "OFF");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Fetch device list from backend
   useEffect(() => {
@@ -33,25 +83,26 @@ const DeviceManagement = () => {
       });
   }, []);
 
+
   // Socket for real-time updates
-  useEffect(() => {
-    const socket = io("http://localhost:5000");
+  // useEffect(() => {
+  //   const socket = io("http://localhost:5000");
 
-    socket.on("newData", (data) => {
-      setDevices(prevDevices =>
-        prevDevices.map(d =>
-          d.deviceId === data.deviceId ? { ...d, ...data } : d
-        )
-      );
+  //   socket.on("newData", (data) => {
+  //     setDevices(prevDevices =>
+  //       prevDevices.map(d =>
+  //         d.deviceId === data.deviceId ? { ...d, ...data } : d
+  //       )
+  //     );
 
-      // Update selectedDevice if it's the same
-      if (selectedDevice?.deviceId === data.deviceId) {
-        setSelectedDevice(prev => ({ ...prev, ...data }));
-      }
-    });
+  //     // Update selectedDevice if it's the same
+  //     if (selectedDevice?.deviceId === data.deviceId) {
+  //       setSelectedDevice(prev => ({ ...prev, ...data }));
+  //     }
+  //   });
 
-    return () => socket.disconnect();
-  }, [selectedDevice]);
+  //   return () => socket.disconnect();
+  // }, [selectedDevice]);
 
   const filteredDevices = useMemo(() => {
     if (!searchTerm) return devices;
@@ -61,7 +112,7 @@ const DeviceManagement = () => {
   }, [devices, searchTerm]);
 
   if (loading) return <p>Loading devices...</p>;
-
+  const volt = readings.voltage*280
   return (
     <div className="device-management-container">
       <header className="device-header">
@@ -136,8 +187,12 @@ const DeviceManagement = () => {
             <div className="details-header">
               <h2>{selectedDevice.deviceId}</h2>
               <div className="details-actions">
-                <button className="restart-btn"><RotateCcw size={16} /> Restart</button>
-                <button className="shutdown-btn"><Power size={16} /> Shutdown</button>
+                <button className="restart-btn"
+                onClick={() => sendAction("shutdown")}
+                ><RotateCcw size={16} /> Restart</button>
+                <button className="shutdown-btn"
+                onClick={() => sendAction("start")}
+                ><Power size={16} /> Shutdown</button>
               </div>
             </div>
 
@@ -146,15 +201,15 @@ const DeviceManagement = () => {
                 <h3>Real-time Readings</h3>
                 <div className="readings-grid">
                   <div className="reading-card">
-                    <div className="reading-value">{selectedDevice.current ?? "-"}A</div>
+                    <div className="reading-value">A</div>
                     <div className="reading-label">Current</div>
                   </div>
                   <div className="reading-card">
-                    <div className="reading-value">{selectedDevice.voltage ?? "-"}V</div>
+                    <div className="reading-value">{volt}V</div>
                     <div className="reading-label">Voltage</div>
                   </div>
                   <div className="reading-card">
-                    <div className="reading-value">{selectedDevice.tilt ?? "-"}°</div>
+                    <div className="reading-value">°</div>
                     <div className="reading-label">Tilt</div>
                   </div>
                 </div>

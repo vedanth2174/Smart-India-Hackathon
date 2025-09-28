@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import {Server} from 'socket.io';
 import http from 'http';
+import axios from 'axios';
 
 
 dotenv.config();
@@ -70,9 +71,64 @@ const DataSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 });
 
-const Data = mongoose.model('sensor_data', DataSchema);
+const VoltageData = mongoose.model('sensor_data', DataSchema);
 
 
+// Route to receive voltage readings from ESP32
+app.post("/api/voltage", async (req, res) => {
+  const { deviceId, voltage } = req.body;
+
+  // Log received data
+  console.log(`Received data from ESP32 -> Device: ${deviceId}, Voltage: ${voltage}`);
+
+  try {
+    const data = new VoltageData({ deviceId, voltage });
+    await data.save();
+
+    // Optional: also log confirmation of saving
+    console.log("Data saved to MongoDB successfully");
+
+    res.json({ message: "Voltage saved", voltage });
+  } catch (err) {
+    console.error("Error saving data:", err);
+    res.status(500).json({ error: "Failed to save voltage" });
+  }
+});
+
+// Route to get all voltage readings (frontend)
+app.get("/api/voltage", async (req, res) => {
+  try {
+    const data = await VoltageData.findOne().sort({ timestamp: -1 }); // Get the latest single record
+    console.log("Fetched latest data for frontend:", data);
+    res.json(data); // Send object, not array
+  } catch (err) {
+    console.error("Error fetching voltage:", err);
+    res.status(500).json({ error: "Failed to fetch voltage" });
+  }
+});
+
+
+let relayState = "OFF"; // Initial state
+const ESP32_IP = "10.72.18.3"; // Replace with actual ESP32 IP on network
+const ESP32_PORT = 80;
+// Route for frontend to change relay
+app.post("/relay", async (req, res) => {
+  const { action } = req.body;
+  let espUrl = "";
+
+  if (action === "start") espUrl = `http://${ESP32_IP}/relay/on`;
+  else if (action === "shutdown") espUrl = `http://${ESP32_IP}/relay/off`;
+  else return res.status(400).json({ error: "Invalid action" });
+
+  try {
+    console.log("Sending request to ESP32:", espUrl);
+    const response = await axios.get(espUrl, { timeout: 5000 }); // 3s timeout
+    res.json({ message: `Relay ${action} command sent`, espResponse: response.data });
+  } catch (error) {
+    console.error("Error calling ESP32:", error.message);
+    res.status(500).json({ error: "Failed to reach ESP32", details: error.message });
+  }
+});
 
 // Login route
 app.post('/login', async (req, res) => {
