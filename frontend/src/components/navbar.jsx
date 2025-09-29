@@ -20,7 +20,7 @@ const Navbar = () => {
       <div className="navbar-container">
         <div className="navbar-brand">
           <Link to="/dashboard" className="navbar-logo">
-            Smart IoT Hub
+            Smart Line Monitor
           </Link>
         </div>
         

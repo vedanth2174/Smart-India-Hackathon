@@ -15,7 +15,7 @@ import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const [selectedPole, setSelectedPole] = useState(null)
+  // const [selectedPole, setSelectedPole] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const navigate = useNavigate();
 
@@ -33,13 +33,7 @@ const Dashboard = () => {
     { id: 4, message: "Normal operation restored at Pole #15", time: "12 min ago", severity: "low" },
   ]
 
-  const poles = [
-    { id: 1, x: 20, y: 30, status: "normal" },
-    { id: 2, x: 40, y: 25, status: "warning" },
-    { id: 3, x: 60, y: 45, status: "critical" },
-    { id: 4, x: 80, y: 35, status: "normal" },
-    { id: 5, x: 30, y: 60, status: "normal" },
-  ]
+
 
     const mapDevices = [
     {

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { io } from "socket.io-client";
+import { useState, useEffect, useMemo } from "react";
+// import { io } from "socket.io-client";
 import axios from 'axios';
 
 import {
@@ -20,7 +20,6 @@ const DeviceManagement = () => {
   const [status, setStatus] = useState("OFF");
   const backendUrl = "http://localhost:5000/relay"; // Backend IP
   const [readings, setReadings] = useState(null);
-  const Url = "http://10.72.18.236:5000/api/voltage"; // replace with your backend IP
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDevice, setSelectedDevice] = useState(null);
@@ -34,10 +33,12 @@ const DeviceManagement = () => {
   //   return () => socket.off("relayUpdate");
   // }, []);
 
+  // const new1 = status
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://10.72.18.236:5000/api/voltage");
+        const res = await axios.get("http://10.72.18.45:5000/api/voltage");
         console.log("Response data:", res.data); // correct object
         setReadings(res.data);
       } catch (err) {
